@@ -1,0 +1,353 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+def tetafinal(teta0, w, t, t0=0):
+  '''Calcula a posição final para um instante qualquer t em um movimento circula uniforme
+   Uso: (teta0, w, t, R, t0=0)
+
+   Entrada:
+   -t0 (float, obrigatório): é a posição angular para o instante inicial t0
+   -w (float, obrigatório): é a velocidade angular instantânea e diferente de zero
+   -t (float, obrigatório): é o instante final
+   -t0 (opcional, padrão: 0): é o instante inicial 
+
+   '''
+  
+  teta = (teta0 + w*(t-t0))
+  return teta
+
+def tempomuc(teta0, teta, w, t0=0):
+  '''Calcula o tempo para deslocar um determinado ângulo em um movimento circular uniforme
+   Uso: (teta0, w t0=0)
+
+   Entrada:
+   -teta0 (float, obrigatório): é a posição angular para o instante inicial t0
+   -teta (float, obrigatório): é a posição angular para o instante t
+   -w (float, obrigatório): é a velocidade angular instantânea e diferente de zero
+   -t0(opcional, padrão: 0): instante inicial 
+
+   '''
+  t =(teta-teta0)/w
+  return t
+
+def velocidade_ang_muc(teta0, teta, t, t0=0):
+  '''Calcula a velocidade angular uniforme dado um deslocamento e um tempo
+   Uso: (teta0, teta, t,t0=0)
+
+   Entrada:
+   -teta0 (float, obrigatório): é a posição angular para o instante inicial t0
+   -teta (float, obrigatório): é a posição angular para o instante t
+   -t(float, obrigatório): é o instante final
+   -t0(opcional, padrão: 0): instante inicial
+
+   '''
+  w = (teta-teta0)/(t-t0)
+  return w
+
+def graficomcu(teta, teta0, w, t, unidadey, unidadetempo, t0=0):
+  '''Cria o gráfico de espaço x tempo em um movimento circular uniforme
+   Uso: (teta0,teta,t,t0=0)
+
+   Entrada:
+   -teta (float, obrigatório): é a posição angular para o instante t
+   -teta0 (float, obrigatório): é a posição angular para o instante inicial t0
+   -w (float, obrigatório): é a velocidade angular instantânea e diferente de zero
+   -t(float, obrigatório): é o instante final
+   -t0(opcional, padrão: 0): instante inicial
+
+  '''
+
+  xtempo=np.linspace(0,t, num=5000)
+  
+  if unidadey == "graus":
+    y=np.array([np.degrees(tetafinal(teta0, w, t, t0)%(2*np.pi)) for t in xtempo])
+  else:
+    y=np.array([tetafinal(teta0, w, t, t0)%(2*np.pi) for t in xtempo])
+
+  plt.figure()
+  plt.title('Posição x Tempo')
+  plt.xlabel(f'{unidadetempo}')
+  plt.ylabel(f'{unidadey}')
+  plt.grid()
+  plt.plot(xtempo, y, '.b')
+  
+
+def unit_check_posic(pergunta, escolha, unidadeangular, R=0):
+  if escolha in ['s', 'v']:
+    if pergunta == '2':
+      s0=float(input('Qual é a posição (s0) para o instante inicial t0? '))
+      s=float(input('Qual é a posição (s) para o instante final? '))
+    else:
+      teta0 = float(input('Qual é a posição (teta0) para o instante inicial t0? '))
+      teta = float(input('Qual é a posição (teta) para o instante final? '))
+      s0 = (teta0 * R)
+      s = (teta * R)
+    return s0, s
+  else:
+    if pergunta == '1':
+      if unidadeangular == "graus":
+        teta0 = np.radians(float(input('Qual é a posição (teta0) para o instante inicial t0? ')))
+        teta=np.radians((float(input('Qual é a posição (teta) para o instante final? '))))
+      else:
+        teta0 = float(input('Qual é a posição (teta0) para o instante inicial t0? '))
+        teta = float(input('Qual é a posição (teta) para o instante final? '))
+    else:
+      s0 = float(input('Qual é a posição no perimetro do círculo (s0) para o instante inicial t0? '))
+      s = float(input('Qual é a posição no perímetro do círculo  (s) para o instante final? '))
+      teta0 = s0/R
+      teta = s/R
+    return teta0, teta
+
+def unit_check_vel(pergunta, escolha, R=0):
+  if escolha in ['s', 'v']:
+    if pergunta == '2':
+      v = float(input('Qual é a velocidade (v)? '))
+    else:
+      R = float(input('Qual o raio do círculo? '))
+      w = float(input('Qual é a velocidade angular(w)? '))
+      v = w*R
+    return v
+  else:
+    if pergunta == '1':
+      w = float(input('Qual é a velocidade angular (w)? '))
+    else:
+      v = float(input('Qual é a velocidade (v)? '))
+      w = v/R
+    return w
+
+def espacofinalmu(s0, v, t, t0=0):
+  '''Calcula o espaço final para um instante qualquer t em um movimento uniforme
+   Uso: (s0,v,t,t0=0)
+
+   Entrada:
+   -s0 (float, obrigatório): é o espaço para o instante inicial t0
+   -v (float, obrigatório): é a velocidade escalar instantânea e diferente de zero
+   -t (float, obrigatório): é o instante final
+   -t0 (opcional, padrão: 0): é o instante inicial 
+
+   '''
+  s = s0 + v*(t-t0)
+  return s
+  
+def velocidademu(s0, s, t, t0=0):
+  '''Calcula a velocidade uniforme dado um deslocamento e um tempo
+   Uso: (s0,s,t,t0=0)
+
+   Entrada:
+   -s0 (float, obrigatório): é o espaço para o instante inicial t0
+   -s (float, obrigatório): é o espaço para o instante final
+   -t(float, obrigatório): é o instante final
+   -t0(opcional, padrão: 0): instante inicial
+
+   '''
+  v = (s-s0)/(t-t0)
+  return v
+
+def muc(escolha, unidadeespaco, unidadetempo, unidadeangular):
+
+  #posiçãofinalmuc(teta0, w, t, t0=0)
+
+  if escolha == 'teta':
+    
+    pergunta = input("Possui posição inicial angular ou escalar? 1. Angular 2. Escalar ")
+    if pergunta == '1':
+      if unidadeangular == "graus":
+        teta0 = np.radians(float(input('Qual é a posição (teta0) para o instante inicial t0? ')))
+      else:
+        teta0 = float(input('Qual é a posição (teta0) para o instante inicial t0? '))
+
+      pergunta = input("Possui velocidade angular ou escalar? 1. Angular 2. Escalar ")
+      if pergunta == '1':
+        w = unit_check_vel(pergunta, escolha)
+      else:
+        w = unit_check_vel(pergunta, escolha, float(input('Qual o raio do círculo? ')))
+
+    else:
+      R = float(input('Qual o raio do círculo? '))
+      s0 = float(input('Qual o espaço (s0) para o instante inicial t0? '))
+      teta0 = s0/R
+      pergunta = input("Possui velocidade angular ou escalar? 1. Angular 2. Escalar ")
+      if pergunta == '1':
+        w = unit_check_vel(pergunta, escolha)
+      else:
+        w = unit_check_vel(pergunta, escolha, R)    
+
+    t0 = float(input('Qual é instante inicial (t0)? '))
+    t = float(input('Qual o tempo final (t)? '))
+
+    teta = tetafinal(t0,w,t,t0)%(2*np.pi)
+    
+    print(f'\n A posição angular para o instante final é {teta} {unidadeangular}\n')
+        
+    graficomcu(teta,teta0,w,t,unidadeangular,unidadetempo,t0)
+ 
+  elif escolha == 'w':
+
+    pergunta = input("Possui posições escalares ou angulares? 1. Angular 2. Escalar ")
+    if pergunta == '1':
+      teta0, teta = unit_check_posic(pergunta, escolha, unidadeangular)
+    else:
+      teta0, teta = unit_check_posic(pergunta, escolha, unidadeangular, float(input("Qual o raio do círculo? ")))    
+
+    t = float(input('Qual o tempo final (t) ? '))
+    t0 = float(input('Qual é instante inicial (t0)? '))
+
+    w = velocidade_ang_muc(teta0, teta,t,t0)
+    print(f'\n A velocidade angular (w) é é {w} rads/{unidadetempo} \n')
+
+    if unidadeangular == 'graus':  
+      teta = np.degrees(teta)
+      teta0 = np.degrees(teta0)
+
+    graficomcu(teta,teta0,w,t,unidadeangular,unidadetempo,t0)
+
+  elif escolha =='t':
+    #tempomuc(teta0,teta,w,t0=0):
+    pergunta = input("Possui posições escalares ou angulares? 1. Angular 2. Escalar ")
+    if pergunta == '1':
+      teta0, teta = unit_check_posic(pergunta, escolha, unidadeangular)
+      pergunta = input("Possui velocidade angular ou escalar? 1. Angular 2. Escalar ")
+      if pergunta == '1':
+        w = unit_check_vel(pergunta, escolha, unidadeangular)
+      else:
+        w = unit_check_vel(pergunta, escolha, float(input('Qual o raio do círculo?')))
+    else:
+      R = float(input('Qual o raio do círculo? '))
+      teta0, teta = unit_check_posic(pergunta, escolha, unidadeangular, R)
+      pergunta = input("Possui velocidade angular ou escalar? 1. Angular 2. Escalar ")
+      w = unit_check_vel(pergunta, escolha, R)
+
+    t0 = float(input('Qual é instante inicial (t0)?'))
+    t = tempomuc(teta0, teta, w, t0)
+    print(f'\n O tempo final (t) é {t} {unidadetempo} \n')
+
+    if unidadeangular == 'graus':
+      teta = np.degrees(teta)
+      teta0 = np.degrees(teta0)
+    
+    graficomcu(teta,teta0,w,t,unidadeangular,unidadetempo,t0)
+
+  elif escolha == 's':
+    R = float(input('Qual o raio do círculo? '))
+    pergunta = input("Possui posições escalares ou angulares? 1. Angular 2. Escalar ")
+    if pergunta == '2':
+      s0 = float(input('Qual o espaço (s0) para o instante inicial t0? '))
+      pergunta = input("Possui velocidade angular ou escalar? 1. Angular 2. Escalar ")
+      if pergunta == '2':
+        v = unit_check_vel(pergunta, escolha)
+      else:
+        v = unit_check_vel(pergunta, escolha, float(input('Qual o raio do círculo?')))
+    else:
+      if unidadeangular == 'graus':
+        teta0 = np.radians(float(input('Qual é a posição (teta0) para o instante inicial t0? ')))
+      else:
+        teta0 = float(input('Qual é a posição (teta0) para o instante inicial t0? '))
+
+      s0 = teta0*R
+      pergunta = input("Possui velocidade angular ou linear? 1. Angular 2. Linear ")
+      v = unit_check_vel(pergunta, escolha, R)
+   
+    t = float(input('Qual o tempo final (t)? '))
+    t0 = float(input('Qual é instante inicial (t0)? '))
+
+    s = espacofinalmu(s0,v,t,t0)%(2*np.pi*R)
+    print(f'\n O espaço para o instante final é {s} {unidadeespaco}\n')
+    
+
+    graficomcu(s,s0,v,t,unidadeespaco,unidadetempo,t0)
+    
+  elif escolha =='v':
+    pergunta = input("Possui posições escalares ou angulares? 1. Angular 2. Escalar ")
+    if pergunta == '1':
+      R = float(input('Qual o raio do círculo? '))
+      s0, s = unit_check_posic(pergunta, escolha, unidadeespaco, R)
+    else:
+      s0, s = unit_check_posic(pergunta, escolha, unidadeespaco)
+
+    t0=float(input('Qual é instante inicial (t0)? '))
+    t=float(input('Qual o tempo final (t) ? '))
+    
+    v = velocidademu(s0,s,t,t0)
+    print(f'\n A velocidade (v) é é {v} {unidadeespaco}/{unidadetempo} \n')
+
+    graficomcu(s,s0,v,t,unidadeangular, unidadetempo,t0)
+    
+#Encontro de dois móveis
+
+def espacoencontromcu(teta0,tetb0, va, vb,unidadetempo, unidadeangular, R, ta0=0, tb0=0):
+
+  '''
+  Calcula o espaço e o tempo de encontro de dois móveis que percorrer a mesma trajetória circular.
+   Uso: (teta0,tetb0,wa,wb,unidadetempo,unidadeespaco,ta0=0,tb0=0)
+
+   Entrada:
+
+   -teta0 (float, obrigatório): é a posição angular em que o móvel a está no instante inicial t0
+   -tetb0 (float, obrigatório): é a posição angular em que o móvel b está no instante inicial t0
+   -wa (float, obrigatório): é a velocidade angular instantânea do móvel a e diferente de zero
+   -wb (float, obrigatório): é a velocidade angular instantânea do móvel b e diferente de zero
+   -ta0(opcional, padrão: 0): instante inicial para o móvel a
+   -tb0(opcional, padrão: 0): instante inicial para o móvel b
+
+   -unidadetempo (string, obrigatório): unidade de tempo
+   -unidadeespaco (string, obrigatório): unidade de espaço
+
+  '''
+  if unidadeangular == 'graus':
+    teta0 = np.radians(teta0)
+    teta = np.radians(teta)
+
+  wa = va/R
+  wb = vb/R
+  
+  t = 0
+  while abs( tetafinal(teta0, wa, t)%(2*np.pi) - tetafinal(tetb0, wb, t)%(2*np.pi) ) > 0.01:
+    t += 0.01
+
+  teta = tetafinal(tetb0, wb,t)%(2*np.pi)
+
+  if unidadeangular == 'graus':
+    teta = np.degrees(teta)
+    teta0 = np.degrees(teta0)
+    tetb0 = np.degrees(tetb0)
+  
+  print(f'\n O tempo para o encontro entre a e b é {t} {unidadetempo} e será na posição {teta} {unidadeangular}\n')
+  
+  tempo = np.linspace(0,t+1, num=5000)
+  if unidadeangular == 'graus':
+    teta0 = np.radians(teta0)
+    tatb0 = np.radians(tetb0)
+    espacoa= np.array([np.degrees(tetafinal(teta0,wa,t)%(2*np.pi)) for t in tempo])
+    espacob= np.array([np.degrees(tetafinal(tetb0,wb,t)%(2*np.pi)) for t in tempo])
+  else:
+    espacoa = np.array([tetafinal(teta0,wa,t)%(2*np.pi) for t in tempo])
+    espacob = np.array([tetafinal(tetb0,wb,t)%(2*np.pi) for t in tempo])
+
+  plt.figure()
+  plt.title('Posição angular x Tempo')
+  plt.xlabel(f'{unidadetempo}')
+  plt.ylabel(f'{unidadeangular}')
+  plt.plot(tempo, espacoa, '.b', label='Móvel a',)
+  plt.plot(tempo, espacob, '.y', label='Móvel b',)
+  plt.grid()
+  plt.legend()
+
+#@title Selecione a variável que você quer cálcular, as unidades e aperte o play (>)
+
+Variável = "t"  #@param ["w", "teta", "s", "v", "t"] {type:"string"}
+unidadetempo= 'segundos' #@param ["segundos"] {type:"string"}
+unidadeespaco= "km" #@param ["mm", "cm", "m", "km"] {type:"string"}
+unidadeangular = 'rads' #@param ["rads", "graus"]3 {type:"string"}
+muc(Variável,unidadeespaco,unidadetempo, unidadeangular)
+
+#@title Preencha as informações e a aperte o play (>) para calcular o tempo e espaço de encontro entre a e b.
+R = 10 #@param {type:"number"}
+teta0 =   0#@param {type:"number"}
+tetb0 =   5#@param {type:"number"}
+va =   1#@param {type:"number"}
+vb =   2#@param {type:"number"}
+
+unidadetempo= 'segs' #@param ["segs", "min", "h"] {type:"string"}
+unidadeangular= 'rads' #@param ["rads", "graus"]{type:"string"}
+
+espacoencontromcu(teta0,tetb0,va,vb,unidadetempo,unidadeangular, R)
