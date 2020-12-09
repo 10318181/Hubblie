@@ -1,0 +1,7 @@
+#@title Selecione a variável que você quer cálcular, as unidades e aperte o play (>)
+
+Variável = "t"  #@param ["w", "teta", "s", "v", "t"] {type:"string"}
+unidadetempo= 'segundos' #@param ["segundos"] {type:"string"}
+unidadeespaco= "km" #@param ["mm", "cm", "m", "km"] {type:"string"}
+unidadeangular = 'rads' #@param ["rads", "graus"]3 {type:"string"}
+muc(Variável,unidadeespaco,unidadetempo, unidadeangular)
