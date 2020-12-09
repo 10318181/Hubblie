@@ -1,0 +1,11 @@
+#@title Preencha as informações e a aperte o play (>) para calcular o tempo e espaço de encontro entre a e b.
+R = 10 #@param {type:"number"}
+teta0 =   0#@param {type:"number"}
+tetb0 =   5#@param {type:"number"}
+va =   1#@param {type:"number"}
+vb =   2#@param {type:"number"}
+
+unidadetempo= 'segs' #@param ["segs", "min", "h"] {type:"string"}
+unidadeangular= 'rads' #@param ["rads", "graus"]{type:"string"}
+
+espacoencontromcu(teta0,tetb0,va,vb,unidadetempo,unidadeangular, R)
